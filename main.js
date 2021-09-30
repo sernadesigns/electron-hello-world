@@ -1,7 +1,7 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeTheme, Menu, MenuItem, globalShortcut } = require('electron');
 const path = require('path');
 
 function createWindow () {
@@ -19,7 +19,15 @@ function createWindow () {
   // mainWindow.loadURL('https://github.com');
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools();
+
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.control && input.key.toLowerCase() === 'i') {
+      // log to the terminal
+      console.log('Pressed Control+I');
+      event.preventDefault();
+    }
+  })
 
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
@@ -35,18 +43,41 @@ function createWindow () {
   });
 }
 
+// After launching the Electron application, you should 
+// see the application menu along with the local shortcut 
+// you just defined.
+const menu = new Menu();
+menu.append(new MenuItem({
+  label: 'Electron',
+  submenu: [{
+    role: 'help',
+    accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Alt+Shift+I',
+    // log to the terminal
+    click: () => { console.log('Electron rocks!') }
+  }]
+}));
+
+Menu.setApplicationMenu(menu);
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  createWindow();
+app.whenReady()
+  .then(() => {
+    globalShortcut.register('Alt+CommandOrControl+I', () => {
+      // log to the terminal
+      console.log('Electron loves global shortcuts!')
+    })
+  })
+  .then(() => {
+    createWindow();
 
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    app.on('activate', function () {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
   });
-})
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

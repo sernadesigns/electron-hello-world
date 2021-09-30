@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <title>Hello World!</title>
   <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
   <link rel="stylesheet" type="text/css" href="./styles.css">
 </head>
 
@@ -19,6 +19,11 @@
   </p>
 
   <p>Current theme source: <strong id="theme-source">System</strong></p>
+
+  <p>Hit Alt+Shift+I on Windows, or Opt+Cmd+I on mac to see a message printed to the console.</p>
+
+  <p>Hit any key with this window focused to see it captured here.</p>
+  <div><span>Last Key Pressed: </span><span id="last-keypress"></span></div>
 
   <button id="toggle-dark-mode">Toggle Dark Mode</button>
   <button id="reset-to-system">Reset to System Theme</button>

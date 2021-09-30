@@ -23,7 +23,8 @@
     "electron": "^14.0.0"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "mousetrap": "^1.6.5"
   },
   "config": {
     "forge": {
