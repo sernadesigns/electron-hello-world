@@ -28,7 +28,14 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "protocols": [
+          {
+            "name": "Electron Fiddle",
+            "schemes": ["electron-fiddle"]
+          }
+        ]
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -44,7 +51,9 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "mimeType": ["x-scheme-handler/electron-fiddle"]
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",

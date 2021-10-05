@@ -1,10 +1,18 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, nativeTheme, Menu, MenuItem, globalShortcut } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeTheme, Menu, MenuItem, globalShortcut, shell, dialog } = require('electron');
 const path = require('path');
 
-function createWindow () {
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient('electron-fiddle', process.execPath, [path.resolve(process.argv[1])]);
+  }
+} else {
+  app.setAsDefaultProtocolClient('electron-fiddle');
+}
+
+const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
@@ -78,6 +86,11 @@ app.whenReady()
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
   });
+
+// Handle the protocol. In this case, we choose to show an Error box.
+app.on('open-url', (event, url) => {
+  dialog.showErrorBox('Welcome Back', `You arrived from: ${url}`);
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
